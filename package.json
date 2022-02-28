@@ -1,13 +1,13 @@
 {
-  "name": "tt",
+  "name": "interact",
   "version": "1.0.0",
-  "description": "Tuto DApp",
+  "description": "",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build"
   },
   "keywords": [],
-  "author": "Dhinesh Sattia",
+  "author": "b1617",
   "license": "ISC",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
