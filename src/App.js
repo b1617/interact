@@ -10,6 +10,7 @@ const App = () => {
   const [address, setAddress] = useState(null);
   const [balance, setBalance] = useState(null);
   const [accountBalance, setAccountBalance] = useState(null);
+  const [amountToTransfer, setAmountToTransfer] = useState(0);
 
   useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
@@ -22,17 +23,21 @@ const App = () => {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
-      const [address, balance] = await Promise.all([
-        signer.getAddress(),
-        signer.getBalance(),
-      ]);
-      setAddress(address);
-      setBalance(ethers.utils.formatEther(balance));
-      getAccountBalance();
+      getBalance(signer);
       setIsConnected(true);
     } else {
       alert("Please install metamask");
     }
+  };
+
+  const getBalance = async (signer) => {
+    const [address, balance] = await Promise.all([
+      signer.getAddress(),
+      signer.getBalance(),
+    ]);
+    setAddress(address);
+    setBalance(ethers.utils.formatEther(balance));
+    getAccountBalance();
   };
 
   const getAccountBalance = async () => {
@@ -42,8 +47,27 @@ const App = () => {
       account.abi,
       provider
     );
-    const balance = await addressContract.getBalance({ from: address });
+    const balance = await addressContract.getBalance();
     setAccountBalance(ethers.utils.formatEther(balance));
+  };
+
+  const onTransfer = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    try {
+      const tx = {
+        to: AccountAddress,
+        value: ethers.utils.parseEther(amountToTransfer),
+      };
+      const transaction = await signer.sendTransaction(tx);
+      await transaction.wait();
+      getAccountBalance();
+      getBalance(signer);
+      setAmountToTransfer(0);
+      alert("Transaction succeed");
+    } catch (error) {
+      alert("Error while transfering");
+    }
   };
 
   return (
@@ -53,9 +77,16 @@ const App = () => {
           <p>{address}</p>
           <p>My balance : {balance} ETH</p>
           <p>Account balance : {accountBalance} ETH</p>
-          <input placeholder="Ethers" type="number" name="value" />
+          <input
+            type="number"
+            name="value"
+            value={amountToTransfer}
+            onChange={(e) => setAmountToTransfer(e.target.value)}
+          />
           <br />
-          <button>Send</button>
+          <button disabled={amountToTransfer < 1} onClick={onTransfer}>
+            Transfer
+          </button>
         </div>
       ) : (
         <div>
