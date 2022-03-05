@@ -1,15 +1,47 @@
-# Basic Sample Hardhat Project
+# Interact
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+Basic account Smart contract with metamask interaction.
 
-Try running some of the following tasks:
+## Setup
+
+- install dependencies
 
 ```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
+npm install
 ```
+
+- Compile smart contract
+
+```shell
+npx hardhat compile
+```
+
+- Run tests
+
+```shell
+npx hardhat test
+```
+
+- Run local hardhat node
+
+```shell
+npx hardhat node
+```
+
+- Deploy smart contract
+
+```shell
+npx hardhat run scripts/deploy.js --network localhost
+```
+
+- Start the app
+
+```shell
+npm run start
+```
+
+Technologies
+
+- Hardhat
+- EtherJS
+- React
